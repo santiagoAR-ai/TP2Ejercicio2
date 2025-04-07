@@ -1,3 +1,4 @@
+import Persistence.RegistroCosto;
 import org.example.*;
 import org.junit.jupiter.api.Test;
 
@@ -13,11 +14,17 @@ public class TestRestaurante {
         List<Bebida> menuBebidas = new ArrayList<>();
         FormaDePago visa = new Visa();
         cargarMenu(menuComidas, menuBebidas);
-        Restaurante restaurante = new Restaurante(menuBebidas, menuComidas);
-        Tarjeta tarjeta = new Tarjeta("Visa", new BigDecimal("5000"), visa);
+        var registroDisco= new RegistroDiscoFake();
+        var serviceFake= new ServiceFake();
+        Restaurante restaurante = new Restaurante(menuBebidas, menuComidas,registroDisco,
+                serviceFake);
+        Tarjeta tarjeta = new Tarjeta("Visa", 5000,
+                visa,"santiagoabdala270@gmail.com");
         Propina propina= Propina.MEDIO;
         restaurante.cobrar(tarjeta, menuComidas.get(0), menuBebidas.get(0),propina);
-        assertEquals(new BigDecimal("2955.45"),tarjeta.getSaldo());
+        assertEquals(2955.45,tarjeta.getSaldo(),0.01f);
+        assertEquals("santiagoabdala270@gmail.com - Pago : 2044.55",
+                serviceFake.mail());
     }
 
     @Test
@@ -26,11 +33,18 @@ public class TestRestaurante {
         List<Bebida> menuBebidas = new ArrayList<>();
         FormaDePago masterCard = new MasterCard();
         cargarMenu(menuComidas, menuBebidas);
-        Restaurante restaurante = new Restaurante(menuBebidas, menuComidas);
-        Tarjeta tarjeta = new Tarjeta("Mastercard", new BigDecimal("5000"), masterCard);
+        var registroCostoDBFake= new RegistroCostoDBFake();
+        var registroDisco= new RegistroDiscoFake();
+        var serviceFake= new ServiceFake();
+        Restaurante restaurante = new Restaurante(menuBebidas, menuComidas,
+                registroDisco,serviceFake);
+        Tarjeta tarjeta = new Tarjeta("Mastercard", 5000, masterCard,
+                "santiagoabdala270@gmail.com");
         Propina propina= Propina.BAJO ;
         restaurante.cobrar(tarjeta,menuComidas.get(1),menuBebidas.get(1),propina);
-        assertEquals(new BigDecimal("3494.48"),tarjeta.getSaldo());
+        assertEquals(3494.48,tarjeta.getSaldo(),0.01f);
+        assertEquals("santiagoabdala270@gmail.com - Pago : 1505.52",
+                serviceFake.mail());
     }
 
     @Test
@@ -38,12 +52,17 @@ public class TestRestaurante {
         List<Comida> menuComidas = new ArrayList<>();
         List<Bebida> menuBebidas = new ArrayList<>();
         FormaDePago comarcaPlus = new ComarcaPlus();
-        cargarMenu(menuComidas, menuBebidas);
-        Restaurante restaurante = new Restaurante(menuBebidas, menuComidas);
-        Tarjeta tarjeta = new Tarjeta("Comarca Plus", new BigDecimal("5000"), comarcaPlus);
+        cargarMenu(menuComidas, menuBebidas);var registroCostoDBFake= new RegistroCostoDBFake();
+        var registroDisco= new RegistroDiscoFake();
+        var serviceFake= new ServiceFake();
+        Restaurante restaurante = new Restaurante(menuBebidas, menuComidas,
+                registroDisco,serviceFake);
+        Tarjeta tarjeta = new Tarjeta("Comarca Plus", 5000, comarcaPlus,"santiagoabdala270@gmail.com");
         Propina propina= Propina.BAJO;
         restaurante.cobrar(tarjeta,menuComidas.get(2),menuBebidas.get(2),propina);
-        assertEquals(new BigDecimal("2750.90"),tarjeta.getSaldo());
+        assertEquals(2750.90,tarjeta.getSaldo(),0.01f);
+        assertEquals("santiagoabdala270@gmail.com - Pago : 2249.1",
+                serviceFake.mail());
     }
 
     @Test
@@ -51,12 +70,17 @@ public class TestRestaurante {
         List<Comida> menuComidas = new ArrayList<>();
         List<Bebida> menuBebidas = new ArrayList<>();
         FormaDePago viedma = new Viedma();
-        cargarMenu(menuComidas, menuBebidas);
-        Restaurante restaurante = new Restaurante(menuBebidas, menuComidas);
-        Tarjeta tarjeta = new Tarjeta("Viedma", new BigDecimal("5000"), viedma);
+        cargarMenu(menuComidas, menuBebidas);var registroCostoDBFake= new RegistroCostoDBFake();
+        var registroDisco= new RegistroDiscoFake();
+        var serviceFake= new ServiceFake();
+        Restaurante restaurante = new Restaurante(menuBebidas, menuComidas,
+                registroDisco,serviceFake);
+        Tarjeta tarjeta = new Tarjeta("Viedma", 5000, viedma,"santiagoabdala270@gmail.com");
         Propina propina= Propina.ALTO;
         restaurante.cobrar(tarjeta,menuComidas.get(3),menuBebidas.get(3),propina);
-        assertEquals(new BigDecimal("2532.50"),tarjeta.getSaldo());
+        assertEquals(2532.50,tarjeta.getSaldo(),0.01f);
+        assertEquals("santiagoabdala270@gmail.com - Pago : 2467.5",
+                serviceFake.mail());
     }
 
     public void cargarMenu(List<Comida> menuComidas, List<Bebida> menuBebidas) {
