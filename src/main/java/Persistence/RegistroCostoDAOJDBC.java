@@ -11,7 +11,7 @@ public class RegistroCostoDAOJDBC implements RegistroCosto{
         try {
             Connection conn = ConnectionManager.getConnection();
             PreparedStatement statement = conn.prepareStatement(
-                    "INSERT INTO inscripcion(fecha,costo)" + "VALUES (?,?)");
+                    "INSERT INTO registroventas(fecha,costo)" + "VALUES (?,?)");
             statement.setDate(1, java.sql.Date.valueOf(fecha));
             statement.setFloat(2, costo);
             int cantidad = statement.executeUpdate();
